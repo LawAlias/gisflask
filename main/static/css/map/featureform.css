@@ -1,0 +1,24 @@
+#poicontainer{
+    position: absolute;
+    left: 300px;
+    top: 100px;
+    width: 300px;
+}
+#geojsonContent{
+    top: 100px;
+    left: 600px;
+    border-radius: 10px;
+}
+.card{
+    border-radius: 10px;
+}
+#getPoiBt{
+    background-color: #9DC45F;
+        border-radius: 5px;
+        -webkit-border-radius: 5px;
+        -moz-border-border-radius: 5px;
+        border: none;
+        padding: 10px 25px 10px 25px;
+        color: #FFF;
+        text-shadow: 1px 1px 1px #949494;
+}

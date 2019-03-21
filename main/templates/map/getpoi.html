@@ -1,0 +1,33 @@
+{% extends 'indexbase.html' %}
+{% block title %}高德poi抓取{% endblock %}
+{% block content %}
+    <div id="poicontainer">
+        <form method="post" class="form smart-green">
+            <h1>高德poi数据抓取</h1>
+            {{ form.csrf_token }}
+            {{ form.key.label  }} {{ form.key }}
+            {{ form.keywords.label  }} {{ form.keywords }}
+            {{ form.city.label  }} {{ form.city }}
+            {{ form.offset.label  }} {{ form.offset }}
+            
+        </form>
+        <button id="getPoiBt" class="button">查询</button>
+    </div>
+    <div id="geojsonContent" class="col-md-4">
+        <div class="card">
+            <div class="card-header border border-top-0 border-right-0 border-left-0">
+                poi的geojson格式
+            </div>
+
+            <div id="poicontent" class="card-body">
+                {% if content %}
+                {{content}}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block otherscripts %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/map/featureform.css') }}">
+<script type="text/javascript" src="{{ url_for('static', filename='js/gaode/gaode.js') }}"></script>
+{% endblock %}

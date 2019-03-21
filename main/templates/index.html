@@ -1,0 +1,91 @@
+{% extends 'admin/base.html' %}
+
+{% block tail_js %}
+    {{ super() }}
+    {% if session.get('xadm_edit_mode', False) %}
+        <script>
+
+            $(".navbar").css("border", "2px solid red");
+            $(".navbar-brand")
+        </script>
+
+    {% endif %}
+{% endblock %}
+
+{% block access_control %}
+    {{ super() }}
+    {% if (current_user.is_authenticated in (True, False) and current_user.is_authenticated)
+            or (current_user.is_authenticated != False and current_user.is_authenticated()) %}
+        <div class="btn-group pull-right">
+            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                <i class="icon-user"></i> {{ current_user.login }} <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                <li><a href="{{ url_for('map') }}">首页</a></li>
+            </ul>
+        </div>
+    {% else %}
+
+        <div class="login">
+            <a class="pull-right btn btn-success" href="{{ url_for_security('login') }}">Log in &nbsp</a>
+        </div>
+
+    {% endif %}
+{% endblock %}
+
+{% block page_body %}
+    {{ super() }}
+    {% if request.endpoint == 'admin.index' %}
+        <div class="container">
+        <h1>用户管理控制台</h1>
+        <div class="row-fluid">
+
+            <div>
+                {% if (current_user.is_authenticated in (True, False) and current_user.is_authenticated)
+            or (current_user.is_authenticated != False and current_user.is_authenticated()) %}
+                    {% if current_user.is_admin %}
+                        <h3>当前登录用户： "{{ current_user.name }}" </h3>
+                        {% for cat in admin_view.admin._menu %}
+                            <h4>
+                                {% if cat._cached_url %}
+                                    <a href="{{ cat._cached_url }}">{{ cat.name }}</a>
+                                {% else %}
+                                    {% if cat._children.__len__() > 0 %}
+                                        {{ cat.name }}
+                                    {% endif %}
+                                {% endif %}
+                            </h4>
+                            <ul>
+                                {% for child in cat._children %}
+                                    {% if child.is_accessible() %}
+                                        <li><a href="{{ child._cached_url }}">
+                                            {% if child._view.doc is defined %}
+                                                {{ child._view.doc() }}
+                                            {% endif %}
+                                            ({{ child.name }})</a></li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        {% endfor %}
+
+                    {% else %}
+
+                        <div class="container">
+                            <p><h3>您的账户未认证! </h3></p>
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <div class="container">
+                        <p><h3>Welcome to xAdmin</h3></p>
+                        <br>
+                        <i>admin role: {{ config['XADMIN_ROLE'] }}, edit role: {{ config['XADMIN_EDIT_ROLE'] }}</i>
+                        <br>
+                        <p class="alert-danger">
+                            <strong>Warning:</strong> Only authorized users are allowed to be here.
+                            Please login using your credentials. </p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+{% endblock page_body %}

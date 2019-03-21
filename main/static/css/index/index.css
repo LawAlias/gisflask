@@ -1,0 +1,13 @@
+.second-item{
+    margin-left: 10px
+}
+
+#searchContainer{
+    position: absolute;
+    left: 45%;
+    width: 200px;
+    z-index: 1000;
+}
+.icon-chaxun{
+    color:#3ec9ff!important;
+}

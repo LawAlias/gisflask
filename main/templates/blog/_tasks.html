@@ -1,0 +1,22 @@
+{% if tasks %}
+    {% for task in tasks %}
+        <p>
+            {{ task.name|striptags|truncate }}批次{{ task.batch|striptags|truncate }}
+            <small>
+                    {{ task.start_time|striptags|truncate }}
+            </small>
+            <small><a href="{{ url_for('.show_task',task_id=task.id) }}">查看详情</a></small>
+        </p>
+        
+        {% if not loop.last %}
+            <hr>
+        {% endif %}
+    {% endfor %}
+{% else %}
+    <div class="tip">
+        <h5>暂无成果</h5>
+        {% if current_user.is_authenticated %}
+            <a href="{{ url_for('new_task') }}">立刻创建</a>
+        {% endif %}
+    </div>
+{% endif %}

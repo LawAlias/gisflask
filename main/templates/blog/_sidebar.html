@@ -1,0 +1,15 @@
+{% if projects %}
+    <div class="card mb-3">
+        <div class="card-header">项目列表</div>
+        <ul class="list-group list-group-flush">
+            {% for project in projects %}
+                <li class="list-group-item  list-group-item-action d-flex justify-content-between align-items-center">
+                    <a href="{{ url_for('show_project', project_id=project.id) }}">
+                        {{ project.name }}
+                    </a>
+                    <span class="badge badge-primary badge-pill"> {{ project.tasks|length }}</span>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}

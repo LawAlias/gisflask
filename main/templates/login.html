@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        {% block head %}
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>demo</title>
+        <link rel="stylesheet" href="{{url_for('static',filename='bootstrap/css/bootstrap.min.css')}}">
+        <link rel="stylesheet" href="{{url_for('static',filename='font-awesome/css/font-awesome.min.css')}}">
+        <link rel="stylesheet" href="{{url_for('static',filename='css/form-elements.css')}}">
+        <link rel="stylesheet" href="{{url_for('static',filename='css/style.css')}}">
+        <link rel="shortcut icon" href="{{url_for('static',filename='ico/favicon.png')}}">
+        {% endblock head %}
+    </head>
+
+    <body>
+        
+        <!-- Top content -->
+        <main class="container">
+            
+            {% block content %}
+            <div class="top-content">
+        	
+                <div class="inner-bg">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-8 col-sm-offset-2 text">
+                                <h1><strong style="background: #d20c04db;border-radius:8px;">demo</strong></h1>
+                                <div class="description">
+                                    {% for message in get_flashed_messages(with_categories=True) %}
+                                    <div class="alert alert-{{ message[0] }}" role="alert">
+                                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                        {{ message[1] }}
+                                    </div>
+                                {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 col-sm-offset-3 form-box">
+                                <div class="form-top">
+                                    <div class="form-top-left">
+                                        <h3>登陆</h3>
+                                        <p>输入账户名和密码:</p>
+                                    </div>
+                                    <div class="form-top-right">
+                                        <i class="fa fa-lock"></i>
+                                    </div>
+                                </div>
+                                <div class="form-bottom">
+                                    <form role="form" action="" method="post" class="login-form">
+                                        <div class="form-group">
+                                            <label class="sr-only" for="form-username">Username</label>
+                                            <input type="text" name="email" placeholder="Username..." class="form-username form-control" id="email">
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="sr-only" for="form-password">Password</label>
+                                            <input type="password" name="password" placeholder="Password..." class="form-password form-control" id="password">
+                                        </div>
+                                        <button type="submit" class="btn">登陆</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6 col-sm-offset-3 social-login">
+                                <!-- <h3>...or login with:</h3> -->
+                                <!-- <div class="social-login-buttons">
+                                    <a class="btn btn-link-2" href="#">
+                                        <i class="fa fa-facebook"></i> Facebook
+                                    </a>
+                                    <a class="btn btn-link-2" href="#">
+                                        <i class="fa fa-twitter"></i> Twitter
+                                    </a>
+                                    <a class="btn btn-link-2" href="#">
+                                        <i class="fa fa-google-plus"></i> Google Plus
+                                    </a>
+                                </div> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+            {% endblock content %}
+        </main>
+        
+
+
+        <!-- Javascript -->
+        <script src="{{url_for('static',filename='js/jquery-1.11.1.min.js')}}"></script>
+        <script src="{{url_for('static',filename='bootstrap/js/bootstrap.min.js')}}"></script>
+        <script src="{{url_for('static',filename='js/jquery.backstretch.min.js')}}"></script>
+        <script src="{{url_for('static',filename='js/scripts.js')}}"></script>
+        
+        <!--[if lt IE 10]>
+            <script src="assets/js/placeholder.js"></script>
+        <![endif]-->
+
+    </body>
+
+</html>

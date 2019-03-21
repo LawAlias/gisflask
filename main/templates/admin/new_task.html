@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% from 'bootstrap/form.html' import render_form %}
+
+{% block title %}新建任务成果{% endblock %}
+
+{% block content %}
+    <div class="page-header">
+        <h1>新建任务成果</h1>
+    </div>
+    <!-- 根据传入的表单类进行表单渲染 -->
+    {{ render_form(form) }}
+     {% block upload %}
+     {% endblock %}
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+{% endblock %}

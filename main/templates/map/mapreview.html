@@ -1,0 +1,114 @@
+{% extends 'indexbase.html' %}
+{% from 'bootstrap/form.html' import render_form %}
+
+{% block title %}地图服务预览{% endblock %}
+{% block content %}
+<script type="text/javascript">
+    bounds=[]
+    
+</script>
+{% for pos in mapbounds %}
+<script type="text/javascript">
+    bounds.push('{{pos}}');
+    var serverUrl='{{mapUrl}}';
+</script>
+{% endfor %}
+    <div id="mapcontainer">
+        {% include 'map/_mapCompare.html' %}
+       
+        <div class="coor">
+                <div style="float: left; margin-right: 6px;">
+                    <label style="float:left">经度:</label><label style="float:left" id="currMouseLng"></label>
+                </div>
+                <div style="float: left; margin-right: 6px;">
+                    <label style="float:left">纬度:</label><label style="float:left" id="currMouseLat"></label>
+                </div>
+                <div style="float: left;">
+                    <label style="float:left">缩放级别:</label><label style="float:left" id="currZoom">10</label>
+                </div>
+        </div>
+    </div>
+{% endblock %}
+{% block otherscripts %}
+<script type="text/javascript">
+//影像图层右键事件
+$.contextMenu({
+        selector: '.context-menu-img', 
+        callback: function(key, options) {
+            switch(key){
+                case "compare":
+                    debugger;
+                    $("#selectCompare").toggle();
+                break;
+            }
+        },
+        items: {
+            "compare": {name: "影像对比", icon: "edit"}
+        }
+    });
+//提交影像选择结果
+function selectCommited(){
+        var htmlIndex=[];
+        $("#selectCompare").hide();
+        
+        if(selectImgCount!=2){
+         alert("请选择两个影像进行比对");
+        }
+        else{
+            
+         $("#tbody>tr").each(function(index){
+             if($(this).find("td:eq(0)>input:checkbox").is(":checked") == true){
+                 htmlIndex.push(index);
+             }
+         });
+        
+         var compareWindow=document.getElementById("imageCompareFrame");
+         document.getElementById('imageCompareFrame').contentWindow.location.reload(true);
+         compareWindow.src="../imageCompare/imageCompareRonghai.html#"+htmlIndex[0]+";"+htmlIndex[1];
+         
+         var imageCompareWindow=document.getElementById("imageCompareWindow");
+         imageCompareWindow.style.display="block";
+        }
+     };
+    var selectImgCount=1;
+//组织影像对比选择框
+function initSelectTable(results,num){
+        var tbHtml="";
+        for(var i=0;i<results.length;i++){
+            tbHtml+="<tr id='tr_1'>"+
+            "<td><input type='checkbox' name='checkImg' id='imgCheck"+i+"' value='"+i+"'/></td>"+
+            "<td>"+results[i].taskTable.time+"</td>"+
+            "</tr>";
+        }
+         var compareh=results.length*45+35;
+        $("#selectCompare").css("height",compareh+"px");
+        $("#tbody").append(tbHtml);
+        var commitBt=document.getElementById("selectCommit");
+        commitBt.onclick=function(){selectCommited();}
+        var imgCheck=document.getElementById("imgCheck"+String(num*1-1));
+        imgCheck.checked=true;
+        //控制选择的个数最大为2
+        $("#tbody>tr").each(function(index){
+            $(this).bind({ 
+                click:function(){
+                    if($(this).find("td:eq(0)>input:checkbox").is(":checked") == true){
+                        if(selectImgCount<2){
+                            selectImgCount++
+                        }
+                        else{
+                            $(this).find("td:eq(0)>input:checkbox")[0].checked=false;
+                        }
+                    }
+                    else{
+                        selectImgCount--;
+                    }
+                 }
+            })
+        })
+    };
+</script>
+
+<script type="text/javascript" src="{{ url_for('static', filename='js/leaflet/leaflet.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/leaflet/leaflet.ChineseTmsProviders.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/map/mapreview.js') }}"></script>
+{% endblock %}

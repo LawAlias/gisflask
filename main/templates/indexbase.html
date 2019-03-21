@@ -1,0 +1,195 @@
+{% from 'bootstrap/nav.html' import render_nav_item %}
+<!doctype html>
+<html lang="en">
+<head>
+    {% block head %}
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>{% block title %}{% endblock title %} - {{ current_user.title|default('首页') }}</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/index/simple-line-icons/css/simple-line-icons.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/index/font-awesome/css/fontawesome-all.min.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/index/styles.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/index/index.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/leaflet.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/map/map.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/map/leaflet.draw.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/map/leaflet.contextmenu.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/map/icon.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/formstyle.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/evol-colorpicker.css') }}">
+
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery_contextmenu/jquery.contextMenu.min.css') }}">
+        <script type="text/javascript" src="{{ url_for('static', filename='js/leaflet/leaflet.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/leaflet/leaflet.ChineseTmsProviders.js') }}"></script>
+
+    {% endblock head %}
+</head>
+
+<body class="sidebar-fixed header-fixed">
+<div class="page-wrapper">
+    <nav class="navbar page-header">
+        <a href="#" class="btn btn-link sidebar-mobile-toggle d-md-none mr-auto">
+            <i class="fa fa-bars"></i>
+        </a>
+
+        
+        <a href="#" class="btn btn-link sidebar-toggle d-md-down-none">
+            <i class="fa fa-bars"></i>
+        </a>
+      
+
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item d-md-down-none">
+                <a href="{{url_for('log')}}" title="查看日志">
+                    <i class="iconele icon-rizhi" style="color:black;font-size: 20px;"></i>
+                    <span class="badge badge-pill badge-danger"></span>
+                </a>
+            </li>
+
+            <li class="nav-item dropdown">
+                {% if current_user.is_authenticated %}
+                    
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <img src="{{ url_for('static', filename='img/touxiang.png') }}" class="avatar avatar-sm" alt="logo">
+                            <span class="small ml-1 d-md-down-none">{{current_user.name}}</span>
+                        </a>
+        
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <div class="dropdown-header">账户信息</div>
+        
+                            <a href="#" class="dropdown-item">
+                                <i class="fa fa-user"></i> 个人中心
+                            </a>
+        
+                            <a href="#" class="dropdown-item">
+                                <i class="fa fa-envelope"></i> 信息
+                            </a>
+                            <a href="#" class="dropdown-item">
+                                <i class="fa fa-bell"></i> 修改密码
+                            </a>
+        
+                            <a href="#" class="dropdown-item">
+                                <i class="fa fa-wrench"></i> 设置
+                            </a>
+                            {% if current_user.is_admin %}
+                                <a href="{{ url_for('xadmin') }}" class="dropdown-item">
+                                    <i class="fa fa-wrench"></i> 权限配置
+                                </a>
+                            {% endif %}
+                            <a href="{{ url_for('logout', next=request.full_path) }}" class="dropdown-item">
+                                <i class="fa fa-lock"></i> 退出登录
+                            </a>
+                {% else %}
+                    <a href="{{ url_for('login', next=request.full_path) }}">登录</a>
+                {% endif %}
+                
+                </div>
+            </li>
+        </ul>
+    </nav>
+    
+    <div class="main-container">
+        <div class="sidebar">
+            <nav class="sidebar-nav">
+                <ul class="nav">
+                    <li class="nav-title">功能菜单</li>
+                   
+                    {% for menu in menus %}
+                        {% if menu.secondmenus.__len__() > 0 %}
+                        <li class="nav-item nav-dropdown"  id="menu{{menu.code}}">
+                            <a href="#" class="nav-link nav-dropdown-toggle">
+                                <i class="icon icon-target"></i> {{menu.name}} <i class="fa fa-caret-left"></i>
+                            </a>
+                            <ul class="nav-dropdown-items">
+                                {% for child in menu.secondmenus%}
+                                <li class="nav-item second-item">
+                                    <a href={{url_for(child.url)}} class="nav-link">
+                                        <i class="icon icon-speedometer"></i> {{child.name}}
+                                    </a>
+                                </li>
+                                {% endfor %}
+                            </ul>   
+                        </li>
+                        {% else %}
+                            {% if menu.name == "影像地图"%}
+                            <li class="context-menu-img nav-item nav-dropdown" id="menu{{menu.code}}">
+                                <a href="#" class="nav-link nav-dropdown-toggle">
+                                    <i class="icon icon-target"></i> {{menu.name}} <i class="fa fa-caret-left"></i>
+                                </a>
+                                <ul class="nav-dropdown-items">
+                                    {% for child in current_user.role.imgServers%}
+                                    <li class="nav-item second-item">
+                                        <a href="{{url_for('mapreview',name=child.name,url=child.wmtsUrl)}}"" class="nav-link">
+                                            <i class="icon icon-speedometer"></i> {{child.name}}
+                                        </a>
+                                    </li>
+                                    {% endfor %}
+                                </ul>   
+                            </li>
+                            {% elif menu.name == "矢量地图"%}
+                            <li class="context-menu-one nav-item nav-dropdown" id="menu{{menu.code}}">
+                                <a href="#" class="nav-link nav-dropdown-toggle">
+                                    <i class="icon icon-target"></i> {{menu.name}} <i class="fa fa-caret-left"></i>
+                                </a>
+                                <ul class="nav-dropdown-items">
+                                    {% for child in geoMenus%}
+                                    <li class="context-menu-compare nav-item second-item vec-child">
+                                        <a href="{{url_for('vectoreview',uid=child.uid,role_id=current_user.role_id)}}"" class="nav-link">
+                                            <i class="icon icon-speedometer"></i> {{child.name}}
+                                        </a>
+                                    </li>
+                                    {% endfor %}
+                                </ul>   
+                            </li>
+                            {% else%}
+                            <li class="nav-item" id="menu{{menu.code}}">
+                                <a href="{{ url_for(menu.url) }}" class="nav-link">
+                                    <i class="icon icon-speedometer"></i> {{menu.name}}
+                                </a> 
+                            </li>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </nav>
+        </div>
+        {% for message in get_flashed_messages() %}
+        <div class="alert alert-info">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% block content %}{% endblock content %}    
+    </div>
+</div>
+
+{% block scripts %}
+   <script type="text/javascript" src="{{ url_for('static', filename='js/utils.js') }}"></script>
+   <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-3.3.1.slim.min.js') }}"></script>
+   <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-2.2.2.min.js') }}"></script>
+   <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-ui-1.12.1.min.js') }}"></script>
+   <script type="text/javascript" src="{{ url_for('static', filename='js/evol-colorpicker.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-ui-1.9.0.custom.min.js') }}"></script>
+    <script type="text/javascript">
+    var saveGeo_url="{{url_for('linefeatures_api')}}";//url
+    var layer_url="{{url_for('layerfeatures_api')}}";
+    var getGeos_url="{{url_for('getGeos')}}";
+    var getPoi_url="{{url_for('getGaodes')}}";
+    var role_id="{{current_user.role_id}}";
+    var getLayers_url="{{url_for('queryAllLayers')}}";
+    var getLayerNames="{{url_for('queryAllLayerNames')}}";
+    var searchFeature="{{url_for('searchFeature')}}";
+    
+    </script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.ui.draggable.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.ui.mouse.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/carbon.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery_contextmenu/jquery.ui.position.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery_contextmenu/jquery.contextMenu.min.js') }}"></script>
+{% endblock %}
+{% block otherscripts %}
+{% endblock %}
+</body>
+</html>

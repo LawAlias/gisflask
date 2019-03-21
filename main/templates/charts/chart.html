@@ -1,0 +1,67 @@
+{% extends 'indexbase.html' %}
+{% from 'bootstrap/form.html' import render_form %}
+
+{% block title %}图表{% endblock %}
+{% block content %}
+    <div class="content">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header bg-light">
+                            柱状图
+                        </div>
+
+                        <div class="card-body">
+                            <canvas id="bar-chart" width="100%" height="50"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header bg-light">
+                            折线图
+                        </div>
+
+                        <div class="card-body">
+                            <canvas id="line-chart" width="100%" height="50"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header bg-light">
+                            雷达图
+                        </div>
+
+                        <div class="card-body">
+                            <canvas id="radar-chart" width="100%" height="50"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header bg-light">
+                            饼图
+                        </div>
+
+                        <div class="card-body">
+                            <canvas id="pie-chart" width="100%" height="50"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+{% endblock %}
+{% block otherscripts %}
+<!-- <script type="text/javascript" src="{{ url_for('static', filename='js/charts/chart.js') }}"></script> -->
+<script type="text/javascript" src="{{ url_for('static', filename='js/charts/chart.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/charts/demo.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/popper/popper.min.js') }}"></script>
+
+
+{% endblock %}

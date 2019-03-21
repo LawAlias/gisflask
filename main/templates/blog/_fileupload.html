@@ -1,0 +1,15 @@
+<!-- 上传照片弹出框 -->
+<div class="easyui-dialog" title="上传文件" id="uploadFile_dlg" data-options="iconCls: 'icon-save'" closed="true" style="min-width: 500px; min-height: 300px;">
+    <div id="mybox"></div>
+    <div style="max-height: 66px;">
+        <ul id="nameList"></ul>
+    </div>
+    <br/>上传进度:<br/>
+    <div class="progress" id="progress">
+        <div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" id="progress-bar" style="width: 0%;">
+            <span class="sr-only">0% Complete</span>
+        </div>
+    </div><br/>
+    <input type="button" value="提交" id="upload-button">
+    <br/>
+</div>

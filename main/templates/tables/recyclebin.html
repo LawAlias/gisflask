@@ -1,0 +1,50 @@
+{% extends 'indexbase.html' %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block title %}回收站{% endblock %}
+{% block content %}
+<style>
+    #kingTable{
+        width:70%;
+        height:80%;
+        margin-left:300px;
+        margin-top: 100px;
+    }
+</style>
+<div style="width:100vw;height:100vh">
+<table id="kingTable" class="data-table"></table>
+</div>
+{% endblock %}
+{% block otherscripts %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery-2.2.2.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.kingTable.js') }}"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/kingTable.css') }}">
+<script type="text/javascript">
+    $(function(){
+        var data = [];
+        for(var i=0;i<165;i++){
+            data[i] = {id:i+1,name:"jason"+(i+1),gender:"男",age:i+1,address:"成都"};
+        }
+
+        var userOptions = {
+            "id":"kingTable",                                //必须 表格id
+            "head":["序号","姓名","性别","年龄","地址"],   //必须 thead表头
+            "body":data,                                    //必须 tbody 后台返回的数据展示
+            "foot":true,                                    // true/false  是否显示tfoot --- 默认false
+            "displayNum": 10,                               //必须   默认 10  每页显示行数
+            "groupDataNum":10,                             //可选    默认 10  组数
+            "clickEventCallBack":function(data_index,tr_index){ //可选 给tbody tr绑定事件回调
+                console.log("tr_index: "+tr_index+" data_index: "+data_index);
+            },
+            sort:true,                                    // 点击表头是否排序 true/false  --- 默认false
+            search:true,                                  // 默认为false 没有搜索
+            lang:{
+                gopageButtonSearchText:"搜索"
+            }
+        }
+        var cs = new KingTable(null,userOptions);
+
+        //$("#kingTable2").KingTable(userOptions)
+    })
+
+</script>
+{% endblock %}

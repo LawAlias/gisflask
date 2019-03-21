@@ -1,0 +1,277 @@
+{% extends 'indexbase.html' %}
+
+{% block title %}影像对比{% endblock %}
+{% block content %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/jquery-ui.min.css') }}">
+<!-- <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-ui.min.js') }}"></script> -->
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery-2.2.2.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/leaflet/leaflet-side-by-side.js') }}"></script>
+<style>
+    html, body {
+      padding: 0;
+      margin: 0;
+      height: 100%;
+    }
+    .left{
+      float:left;
+      width:50%;
+    }
+    .right{
+      float:right;
+      width: 50%;
+    }
+    .br{position: absolute;bottom: 6px;color: gold;right: 380px;z-index: 999;}
+    .bl{position: absolute;bottom: 6px;color: gold;right: 40px;z-index: 999;}
+    .compare_btn{ background: deepskyblue;border: none; width: 120px;height: 30px;color: white; cursor: pointer; text-decoration: none; border-radius: 6px;}
+    .compare_btn:hover{
+      color: gold;
+    }
+    #imgTime{
+        left:380px;
+    }
+
+  </style>
+</head>
+<body>
+    <!-- 地图 -->
+  <div style="width:100vw; height:100vh; position:relative;float:left;z-index:0">
+    <div id="map" style="height:100%;background:black;z-index:0"></div>
+    <div id="map_right" class="right" style="height:100%;background:black;display:none;z-index:0"></div>
+  </div>
+  <div id="range_swipe_div" style="margin:0 10px;position:absolute;z-index:999;height:100%;">
+    <div id="range_swipe" style="height:99%"></div>
+  </div>
+  <div id="range_opacity_div" style="margin:0 10px;position:absolute;z-index:999;width:200px;top:36px;display:none;">
+    <div id="range_opacity" style="width:200px;"></div>
+  </div>
+  <div style="position: absolute;top: 6px;color: gold;left: 40px;z-index: 999;">
+    <span></span>
+  </div>
+  <div class="br">
+    <span id="rightImgName"></span>
+  </div>
+  <div id="imgTime" class="br">
+    <span id="leftImgName" style="color: red; font-weight: 600;"></span>
+  </div>
+  <div style="position:absolute; top: 6px; right: 66px;z-index:999;">
+    
+  </div>
+  <script>
+    // var layerUrl1="{{url1}}";
+    // var layerUrl2="{{url2}}";
+    var html2Escape=function (sHtml) {
+    return sHtml.replace(/amp;/g,"")
+   }
+    var name1="{{img1.name}}";
+    var name2="{{img2.name}}";
+    var layerUrl1="{{img1.wmtsUrl}}";
+    var layerUrl2="{{img2.wmtsUrl}}";
+    layerUrl1=html2Escape(layerUrl1);
+    layerUrl2=html2Escape(layerUrl2);
+</script>
+  <script>
+    var layer = {
+        layerImg:[],
+        campare:function(mapId,layer1,layer2,center,crs){
+            if(!crs){
+                crs=L.CRS.EPSG4326;
+            }
+            var _this = this;
+            var map = L.map(mapId, {
+                crs:crs,
+                layers: [layer1],
+                zoomControl: false,
+                attributionControl: false
+            }).setView(center, 17);
+            var image = L.tileLayer.chinaProvider('GaoDe.Normal.Map', {
+                maxZoom: 18,
+                minZoom: 4
+            });
+            image.addTo(map)
+            this.map = map;
+            this.layer1 = layer1;
+            this.layer2 = layer2;
+            this.layerImg = [layer2]; 
+            $.each(this.layerImg, function (index, item) {
+                map.addLayer(item);
+            });
+            $("#range_swipe").slider({
+                orientation: "vertical",
+                range: "min",
+                min: 0,
+                max: 100,
+                value: 50,
+                slide: function(event, ui) {
+                _this.clipmap();
+                }
+            });
+            $("#range_opacity").slider({
+                range: "min",
+                min: 0,
+                max: 100,
+                value: 100,
+                slide: function(event, ui) {
+                _this.setOpacity();
+                }
+            });
+            this.setRollScreen(center);
+        },
+        clipmap:function(){
+            var _this = this;
+            var step = Number($('#range_swipe').slider('option', 'value'));
+            var nw = layer.map.containerPointToLayerPoint([0, 0]),
+                se = layer.map.containerPointToLayerPoint(layer.map.getSize()),
+                clipY = nw.y + (se.y - nw.y) * (100 - step) / 100;
+            var rect = 'rect(' + [nw.y, se.x, clipY, nw.x].join('px,') + 'px)';
+            var top = (se.y - nw.y) * (100 - step) / 100;
+            $("#imgTime").removeAttr("style");
+            $('#imgTime').css("top", top - 30);
+            $.each(layer.layerImg, function (index, item) {
+                item.getContainer().style.clip = rect;
+            });
+        },
+        setOpacity: function(){
+            var step = Number($('#range_opacity').slider('option', 'value'));
+            this.layer2.setOpacity(step / 100);
+        },
+        setRollScreen:function(center){
+            var _this = this;
+            _this.removeOpacity();
+            _this.removeSplite();
+            _this.romoveRollScreenHorizontal();
+            this.layer2.setOpacity(1);
+            $('#range_swipe_div').show();
+            _this.map.setView(center, 17);
+            _this.map.off('move', _this.clipmap);
+            _this.map.on('move', _this.clipmap);
+            _this.clipmap();
+        },
+        setRollScreenHorizontal:function (center){
+            var _this = this;
+            _this.removeRollScreen();
+            _this.removeOpacity();
+            _this.removeSplite();
+            _this.romoveRollScreenHorizontal();
+            _this.map.setView(center, 17);
+            _this.layer2.setOpacity(1);
+            _this.control = L.control.sideBySide(_this.layer2, _this.layer1).addTo(_this.map);
+            $("#imgTime").removeAttr("style");
+            $('#imgTime').css("bottom", 6);
+        },
+        setLayerOpacity:function (center) {
+            var _this = this;
+            _this.removeRollScreen();
+            _this.removeSplite();
+            _this.romoveRollScreenHorizontal();
+            $('#range_opacity_div').show();
+            _this.map.setView(center, 17);
+            _this.setOpacity();
+            $("#imgTime").removeAttr("style");
+            $('#imgTime').css("bottom", 6);
+        },
+        setSplite: function (center,crs) {
+                if(!crs){
+                    crs=L.CRS.EPSG4326;
+                }
+            var _this = this;
+            if(_this.map2)return;
+            _this.removeRollScreen();
+            _this.removeOpacity();
+            _this.romoveRollScreenHorizontal();
+            $('#map').addClass('left');
+            $('#map_right').show();
+            _this.map2 = L.map('map_right', {
+                crs:crs,
+                zoomControl: false,
+                attributionControl: false
+            }).setView(center, 17);
+            var image = L.tileLayer.chinaProvider('GaoDe.Normal.Map', {
+                maxZoom: 18,
+                minZoom: 4
+            });
+            image.addTo(_this.map2)
+            _this.map.removeLayer(_this.layer1);
+            _this.map.invalidateSize();
+            _this.map.setView(center, 17);
+            _this.map2.addLayer(_this.layer1);
+            _this.layer2.setOpacity(1);
+            _this.maps = [_this.map2,_this.map];
+            _this.maps.map(function (t) {
+                t.on({drag:_this.maplink,zoom:_this.maplink})
+            })
+            $("#imgTime").removeAttr("style");
+            $('#imgTime').css("bottom", 6);
+        },
+        maplink:function(e){
+            var _this = this;
+            layer.maps.map(function (t) {
+                if(t){
+                    t.setView(_this.getCenter(),_this.getZoom())
+                }
+            })
+        },
+        removeRollScreen:function (){
+            var _this = this;
+            $('#range_swipe_div').hide();
+            $.each(_this.layerImg, function (index, item) {
+                item.getContainer().style.clip = 'auto';
+            });
+            _this.map.off('move',_this.clipmap);
+        },
+        romoveRollScreenHorizontal:function () {
+            if(this.control) {
+                this.map.removeControl(this.control);
+            }
+        },
+        removeOpacity:function(){
+        $('#range_opacity_div').hide();
+        },
+        removeSplite:function(){
+        if(this.map2){
+            $('#map_right').hide();
+            this.map2.removeLayer(this.layer1);
+            this.map2.remove();
+            this.map2 = null;
+            $('#map').removeClass('left');
+            this.map.invalidateSize();
+            this.map.removeLayer(this.layer2);
+            this.map.addLayer(this.layer1);
+            this.map.addLayer(this.layer2);
+            this.maps = [];
+        }
+        },
+        getMap:function(){
+            return this.map;
+        }
+    };
+   $(function(){
+        var rightImgName=document.getElementById("rightImgName");
+        rightImgName.innerHTML=name1;
+        var leftImgName=document.getElementById("leftImgName");
+        leftImgName.innerHTML=name2;
+      
+        var layer1 =L.tileLayer(layerUrl1,{
+            maxZoom:22
+        });
+        var layer2 = L.tileLayer(layerUrl2,{
+            maxZoom:22
+        });
+        
+        $(document).ready(function () {
+            var center = [36.169938,120.455901]; 
+            layer.campare('map',layer1,layer2,center,L.CRS.EPSG3857); 
+            var map = layer.getMap();
+            map.setZoom(10);
+            layer.setSplite(center,L.CRS.EPSG3857);
+        });
+});
+   
+    </script>
+</body>
+   
+{% endblock %}
+{% block otherscripts %}
+
+
+{% endblock %}

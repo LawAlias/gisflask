@@ -1,0 +1,35 @@
+{% extends 'indexbase.html' %}
+{% from 'bootstrap/form.html' import render_form %}
+
+{% block title %}矢量数据预览{% endblock %}
+{% block content %}
+<script type="text/javascript">
+    var role_id=""
+    var uid=""
+</script>
+{% if role_id !="" %}
+<script type="text/javascript">
+    uid='{{uid}}';
+    role_id='{{role_id}}'
+</script>
+{% endif %}
+    <div id="mapcontainer">
+       
+        <div class="coor">
+                <div style="float: left; margin-right: 6px;">
+                    <label style="float:left">经度:</label><label style="float:left" id="currMouseLng"></label>
+                </div>
+                <div style="float: left; margin-right: 6px;">
+                    <label style="float:left">纬度:</label><label style="float:left" id="currMouseLat"></label>
+                </div>
+                <div style="float: left;">
+                    <label style="float:left">缩放级别:</label><label style="float:left" id="currZoom">10</label>
+                </div>
+        </div>
+    </div>
+{% endblock %}
+{% block otherscripts %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/leaflet/leaflet.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/leaflet/leaflet.ChineseTmsProviders.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/map/vectoreview.js') }}"></script>
+{% endblock %}

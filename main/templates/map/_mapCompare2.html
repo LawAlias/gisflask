@@ -1,0 +1,23 @@
+<div id="selectCompare" class="table-scrollable" style="display:none" >
+    <h3>选择对比影像</h3>          
+    <button id="closeCompareDiv">关闭</button>
+    <table id="selectTable" class="table table-striped table-bordered table-hover order-column hide" bgcolor= border=0 cellpadding=1 cellspacing=1 rules="all">  
+        <thead>  
+           <tr class="listhead">  
+               <th></th>  
+               <th>时间</th>                        
+           </tr>  
+        </thead>  
+        <tbody align="center" id="tbody">  
+           {% for img in current_user.role.imgServers %}
+            <tr id='tr_1'>
+                <td><input type='checkbox' name='checkImg' id='imgCheck{{loop.index}}' value='{{loop.index}}'/></td>
+                <td>{{img.name}}</td>
+            </tr>
+           {% endfor %}
+        </tbody>  
+    </table>
+    <p style="position: absolute;margin-top: 15px;margin-left: 8px;">
+    <button id="selectCommit">影像对比</button>
+    </p>
+</div>

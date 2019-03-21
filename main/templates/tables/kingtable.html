@@ -1,0 +1,70 @@
+{% extends 'indexbase.html' %}
+{% block content %}
+
+{% endblock %}
+{% block otherscripts %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/kingtable/kingtable.css') }}">
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery-2.2.2.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/kingtable/lodash.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/kingtable/r.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/kingtable/i.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/kingtable/ready.js') }}"></script>
+<script src="{{ url_for('static', filename='js/kingtable/shared/components/extend.js') }}"></script>
+<script src="{{ url_for('static', filename='js/kingtable/shared/components/events.js') }}"></script>
+<script src="{{ url_for('static', filename='js/kingtable/shared/components/string.js') }}"></script>
+<script src="{{ url_for('static', filename='js/kingtable/shared/components/regex.js') }}"></script>
+<script src="{{ url_for('static', filename='js/kingtable/shared/components/date.js') }}"></script>
+<script src="{{ url_for('static', filename='js/kingtable/shared/components/reflection.js') }}"></script>
+<script src="{{ url_for('static', filename='js/kingtable/shared/components/array-search.js') }}"></script>
+<script src="{{ url_for('static', filename='js/kingtable/shared/data/object-analyzer.js') }}"></script>
+<script src="{{ url_for('static', filename='js/kingtable/shared/data/csv.js') }}"></script>
+<script src="{{ url_for('static', filename='js/kingtable/shared/data/xml.js') }}"></script>
+<script src="{{ url_for('static', filename='js/kingtable/shared/data/file.js') }}"></script>
+
+<script src="{{ url_for('static', filename='js/kingtable/shared/data/sanitizer.js') }}"></script>
+<script src="{{ url_for('static', filename='js/kingtable/shared/data/query.js') }}"></script>
+<script src="{{ url_for('static', filename='js/kingtable/shared/data/i18n.js') }}"></script>
+<script src="{{ url_for('static', filename='js/kingtable/shared/menus/menu-builder.js') }}"></script>
+<script src="{{ url_for('static', filename='js/kingtable/shared/menus/menu-functions.js') }}"></script>
+<script src="{{ url_for('static', filename='js/kingtable/shared/menus/menu.js') }}"></script>
+<script src="{{ url_for('static', filename='js/kingtable/shared/filters/filters-manager.js') }}"></script>
+
+<!-- <script src="{{ url_for('static', filename='js/kingtable/i.js') }}scripts/libs/jquery-ui-sortable.js"></script> -->
+<script src="{{ url_for('static', filename='js/kingtable/kingtable-core.js') }}"></script>
+<script src="{{ url_for('static', filename='js/kingtable/jquery.kingtable.js') }}"></script>
+<script src="{{ url_for('static', filename='js/kingtable/lodash/jquery.kingtable-lodash.js') }}"></script>
+<script src="{{ url_for('static', filename='js/kingtable/lodash/templates.js') }}"></script>
+<script>
+		//	<!-- ListDK.init(); -->
+		(function () {
+			//add reference to window, just for debugging purpose
+			var table = window.kingtable = new $.KingTable({
+			  id: "colors-table",
+			  collectionName: "colors",
+			  entityName: "color",
+			  $el: $("#content"),
+			  url: Setting.queryAreaUrl,
+			  orderBy: "name",
+			  fixed: false,
+			  sortOrder: "asc",
+			  columns: {
+				Name: "地块名称",
+				Attri:"简介",
+				Video:"视频",
+				D3url:{
+					displayName: "全景",
+					template: "<a class=\"ui-quanjing\" href=\"{{D3url}}\">查看</a>"
+				  },
+				Url:{
+					displayName: "详情",
+					template: "<a class=\"ui-xiangqing\" href=\"{{Url}}#{{Center}}\">详情</a>"
+				  },
+				Project:"所属项目",
+				CreateTime:"创建时间",
+				Center:"中心点"
+			  }
+			});
+			table.render();
+		  })();
+	</script>
+{% endblock %}

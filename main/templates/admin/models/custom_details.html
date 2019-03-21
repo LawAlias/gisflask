@@ -1,0 +1,45 @@
+{% extends 'admin/model/details.html' %}
+
+{% block head %}
+    {{ super() }}
+    {{ lib.form_css() }}
+{% endblock %}
+
+{% block details_search %}
+{% endblock %}
+
+{% block navlinks %}
+  <h4 style="display:inline">{{ admin_view.name }}</h4> #{{ request.args.get('id') }} <span class="pull-right"><i>{{ admin_view.doc()}} &nbsp; </i><input type="button" value="Back" onclick="window.history.back()" /></span>
+    {{ super() }}
+{% endblock %}
+
+{% block details_table %}
+
+       {% call lib.form_tag(form) %}
+           <fieldset readonly>
+        {{ lib.render_form_fields(form, form_opts=form_opts) }}
+
+{#
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10 submit-row">
+                	<a href="{{ return_url }}" class="btn btn-cancel" role="button">{{ _gettext('Back') }}</a>
+                </div>
+            </div>
+#}
+
+        {% block custom_field %}{% endblock %}
+        </fieldset>
+    {% endcall %}
+{% endblock %}
+
+{% block tail %}
+  {{ super() }}
+  {{ lib.form_js() }}
+    <script>
+        $(document).ready(function() {
+            $.each($('.admin-form').serializeArray(), function (index, value) {
+                $('[name="' + value.name + '"]').attr('readonly', 'readonly');
+            });
+        });
+    </script>
+{% endblock %}

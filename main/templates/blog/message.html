@@ -1,0 +1,84 @@
+{% extends 'indexbase.html' %}
+{% from 'bootstrap/form.html' import render_form %}
+
+{% block content %}
+
+
+    <div class="hello-form">
+        {{ render_form(form, action=request.full_path) }}
+    </div>
+    <h5>{{ messages|length }} messages
+        <small class="float-right">
+            <a href="#bottom" title="Go Bottom">&darr;</a>
+        </small>
+    </h5>
+    <div class="list-group">
+        {% for message in messages %}
+            <a class="list-group-item list-group-item-action flex-column">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1 text-success">{{ message.name }}
+                        <small class="text-muted"> #{{ loop.revindex }}</small>
+                    </h5>
+                    <small data-toggle="tooltip" data-placement="top"
+                           data-timestamp="{{ message.timestamp.strftime('%Y-%m-%dT%H:%M:%SZ') }}"
+                           data-delay="500">
+                        {{ moment(message.timestamp).fromNow(refresh=True) }}
+                    </small>
+                </div>
+                <p class="mb-1">{{ message.body }}</p>
+            </a>
+        {% endfor %}
+    </div>
+{% endblock %}
+{% block otherscripts %}
+<style>
+        body {
+        background-color: rgb(245, 245, 245) !important;
+    }
+    
+    p {
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+    }
+    
+    .container {
+        max-width: 640px !important;
+    }
+    
+    .hello-form {
+        margin-bottom: 20px;
+        margin-left: 450px;
+        margin-top: 100px;
+    }
+    
+    header {
+        margin: 50px 0 40px 0;
+    }
+    
+    header h1 {
+        font-size: 60px;
+        font-weight: bold;
+    }
+    
+    .sub-title {
+        font-size: 24px;
+    }
+    
+    @media screen and (max-width: 600px) {
+        .sub-title {
+            display: block;
+        }
+    }
+    
+    header a {
+        text-decoration: none !important;
+    }
+    
+    footer {
+        margin: 20px;
+    }
+    .list-group{
+        margin-top: 100px;
+    }
+    </style>
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends 'indexbase.html' %}
+{% from 'bootstrap/form.html' import render_form %}
+{% block title %}日志列表{% endblock %}
+{% block content %}
+<style>
+    .container-fluid {
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: 250px;
+    margin-top: 90px;
+}
+    .close{
+        margin-top:-80px
+    }
+</style>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-light">
+                    日志列表
+                </div>
+
+                <div class="card-body">
+                    {% for log in logs %}
+                    <div class="alert alert-info">
+                            {{log}}
+                        <a href="{{url_for('log',logs=logs,path=log)}}"" class="nav-link">
+                            <i class="iconele icon-zhankai2"></i> 查看
+                        </a>
+                       
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+                <div class="card">
+                        <div class="card-header bg-light">
+                            日志内容
+
+                            <div class="card-actions">
+                              
+
+                                <a href="#" class="btn">
+                                    <i class="iconele icon-ziyuan" style="color:black"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="card-body" id="logcontent">
+                           {{content}}
+                        </div>
+                    </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

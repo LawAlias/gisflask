@@ -1,0 +1,284 @@
+<!-- 绘图工具栏 start -->
+    <div id="panel_drawtool" class="panel_drawtool box_tool hide">
+        <div class="box_tool_inner">
+          <div class="box_tool_container">
+           <a id="point" class="btn_tool ml_5" href="javascript:void(0)" title="绘制点"><i class="iconele icon-biaodiandidian_"></i></a>
+           <a id="line" class="btn_tool" href="javascript:void(0)" title="绘制线"><i class="iconele icon-icon-test1"></i></a>
+           <a id="polygon" class="btn_tool" href="javascript:void(0)" title="绘制多边形"><i class="iconele icon-duobianxing"></i></a>           
+           <a id="clear" class="btn_tool" href="javascript:void(0)" title="清空"><i class="iconele icon-ziyuan"></i></a>
+           <a id="export" class="btn_tool" href="javascript:void(0)" title="导出"><i class="iconele icon-export"></i></a>
+           <a id="import" class="btn_tool" href="javascript:void(0)" title="保存(存入数据库)"><i class="iconele icon-cunchu"></i></a>
+           <a id="styleEdit" class="btn_tool mr_5" href="javascript:void(0)" title="设置样式"><i class="iconele icon-icon-test"></i></a>
+           <input type="file" id="importJSON" accept = ".kml,.json,.geojson,.shp,.csv" style="display: none"></input>
+         </div>
+         <!-- <div id="list_tool_export" class="box_tool_list hide">
+           <ul>
+             <li id="export_geo">geojson</li>
+             <li id="export_kml">kml</li>
+             <li>csv</li>
+             <!-- <li>ccg</li> -->
+           <!-- </ul>
+         </div> --> 
+       </div>
+      </div>
+      <!-- 绘图工具栏 end -->
+    <!-- 单个图形样式弹窗 start -->
+    <div id="resetStyle" class="bubbleWindow" style="display:none;">
+      <div class="box">
+        <div class="content">
+          <div class="sec">
+            <ul class="icon_tbsnr pa" style="top: 60px;left: 53px;" id="rS_pt_markerItem">
+              <li><a class="img_marker01" href="javascript:void(0)" title=""></a></li>
+              <li><a class="img_marker02" href="javascript:void(0)" title=""></a></li>
+              <li><a class="img_marker03" href="javascript:void(0)" title=""></a></li>
+              <li><a class="img_marker04" href="javascript:void(0)" title=""></a></li>
+            </ul>
+            <table id="tab_rS_txt" width="178" class="tab_prop" border="0" cellspacing="0" cellpadding="0">
+              <tbody>
+                <tr>
+                  <td class="tab_col_title">内容</td>
+                  <td><input id="rS_txt_info" class="prop_geo_min" type="text"></td>
+                </tr>
+                <tr>
+                  <td class="tab_col_title">大小</td>
+                  <td><input id="rS_txt_size" class="prop_geo_min" type="number" min="1" max="500"></td>
+                </tr>
+                <tr>
+                  <tr><td class="tab_col_title">颜色</td>
+                  <td><input id="rS_txt_color" class="prop_geo_min" readonly="true" type="text"></td>
+                </tr>
+                <tr>
+                  <tr>
+                    <td class="tab_col_title">透明度</td>
+                    <td>
+                      <select id="rS_txt_opacity" class="prop_geo_min" type="text">
+                        <option>1</option>
+                        <option>0.8</option>
+                        <option>0.6</option>
+                        <option>0.4</option>
+                        <option>0.2</option>
+                      </select>
+                    </td>
+                </tr>
+              </tbody>
+            </table>
+            <table id="tab_rS_pt" width="178" class="tab_prop" border="0" cellspacing="0" cellpadding="0">
+              <tbody>
+                <tr>
+                  <td class="tab_col_title">大小</td>
+                  <td><select id="rS_pt_size" class="prop_geo_min">
+                        <option>1</option>
+                        <option>1.1</option>
+                        <option>1.2</option>
+                        <option>1.3</option>
+                        <option>1.4</option>
+                        <option>1.5</option>
+                    </select></td>
+                </tr>
+                <tr>
+                  <tr><td class="tab_col_title">标记</td>
+                  <td>
+                    <a id="rS_pt_marker" class="prop_geo_min" href="javascript:void(0)">
+                      <div class="img_marker01" style="height:24px;width:100px;"></div>
+                    </a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <table id="tab_rS_line" width="178" class="tab_prop" border="0" cellspacing="0" cellpadding="0">
+              <tbody>
+                <tr>
+                  <td class="tab_col_title">颜色</td>
+                  <td><input id="rS_line_color" class="prop_geo_min" readonly="true" type="text"></td>
+                </tr>
+                <tr>
+                  <tr><td class="tab_col_title">宽度</td>
+                  <td>
+                    <select id="rS_line_width" class="prop_geo_min">
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                        <option>6</option>
+                        <option>7</option>
+                    </select></td>
+                </tr>
+                <tr>
+                  <td class="tab_col_title">透明度</td>
+                  <td>
+                    <select id="rS_line_opacity" class="prop_geo_min">
+                        <option>1</option>
+                        <option>0.8</option>
+                        <option>0.6</option>
+                        <option>0.4</option>
+                        <option>0.2</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <tr><td class="tab_col_title">类型</td>
+                  <td><select id="rS_line_dash" class="prop_geo_min">
+                      <option value="">——————</option>
+                      <option value="5,5">- - - - - - - - - -</option>
+                      <option value="10,10">— — — — —</option>
+                      <option value="20,10,5,5,5,10">— - - — - - —</option>
+                    </select>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <table id="tab_rS_pol" width="178" class="tab_prop tbs_tab" border="0" cellspacing="0" cellpadding="0">
+              <tbody>
+                <tr>
+                  <td class="tab_col_title">线颜色</td>
+                  <td><input id="rS_pol_linecolor" class="prop_geo_min pr" readonly="true" type="text"></td>
+                </tr>
+                <tr>
+                  <tr><td class="tab_col_title">线宽度</td>
+                  <td>
+                    <select id="rS_pol_linewidth" class="prop_geo_min">
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                        <option>6</option>
+                        <option>7</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="tab_col_title">线透明度</td>
+                  <td><select id="rS_pol_lineopacity" class="prop_geo_min">
+                        <option>1</option>
+                        <option>0.8</option>
+                        <option>0.6</option>
+                        <option>0.4</option>
+                        <option>0.2</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <tr><td class="tab_col_title">线类型</td>
+                  <td><select id="rS_pol_linedash" class="prop_geo_min">
+                      <option value="">——————</option>
+                      <option value="5,5">- - - - - - - - - -</option>
+                      <option value="10,10">— — — — —</option>
+                      <option value="20,10,5,5,5,10">— - - — - - —</option>
+                    </select></td>
+                </tr>
+                <tr>
+                  <td class="tab_col_title">填充色</td>
+                  <td><input id="rS_pol_color" class="prop_geo_min" readonly="true" type="text"></td>
+                </tr>
+                <tr>
+                  <tr><td class="tab_col_title">透明度</td>
+                  <td><select id="rS_pol_opacity" class="prop_geo_min">
+                        <option>1</option>
+                        <option>0.8</option>
+                        <option>0.6</option>
+                        <option>0.4</option>
+                        <option>0.2</option>
+                    </select></td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="bg_box_btn overflow" style="width: 100%;height: 26px;padding-top: 4px;">
+              <a id="btn_ok_rS" class="btn_prop float_l" href="javascript:void(0)">确定</a>
+              <a id="btn_cancel_rS" class="btn_prop float_r" href="javascript:void(0)">取消</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="outerPointer" style="left: -5px; top: 50px; border-right: none; border-top: none;"></div> -->
+    </div>
+    <!-- 单个图形样式弹窗 end -->
+        <!-- 默认样式设置弹窗 start -->
+        <div id="panel_DrawStyle" class="bg_prop_box pa" style="width: 350px; left: 315px; top: 150px;display:none;z-index:1000;">
+          <div>
+            
+            <table width="300" class="tab_prop" border="0" cellspacing="0" cellpadding="0" style="margin-top:5px;">
+                <tbody>
+                  <tr class="table_title">
+                    <td colspan="4" class="deadline">点样式</td>
+                  </tr>
+                  <tr>
+                    <td class="tab_col_title">标记</td>
+                    <td width="101">
+                      <a class="prop_geo" href="javascript:void(0)" id="pStyleSelect" style="display:block;">
+                      <div class="img_marker01" style="height:100%;width:80px;"></div>
+                      </a>
+                    </td>
+                    <td class="tab_col_title">大小</td>
+                    <td width="101">
+                      <select id="opt_pt_iconSize" class="prop_geo">
+                        <option>1.0</option>
+                        <option>1.1</option>
+                        <option>1.2</option>
+                        <option>1.3</option>
+                        <option>1.4</option>
+                        <option>1.5</option>
+                      </select>
+                    </td>
+                  </tr>
+                </tbody>
+            </table>
+            <table width="300" class="tab_prop" border="0" cellspacing="0" cellpadding="0" style="margin-top:5px;">
+              <tbody>
+                <tr class="table_title">
+                  <td colspan="4" class="deadline">线样式</td>
+                </tr>
+                <tr>
+                  <td class="tab_col_title">颜色</td>
+                  <td width="101">
+                      <input id="opt_line_color" class="prop_geo" style="width:87px;text-align:left;padding-left:8px;" readonly="true" type="text">
+                  </td>
+                  <td class="tab_col_title">透明度</td>
+                  <td width="101">
+                    <select id="opt_line_opacity" class="prop_geo">
+                      <option>1</option>
+                      <option>0.8</option>
+                      <option>0.6</option>
+                      <option>0.4</option>
+                      <option>0.2</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="tab_col_title">宽度</td>
+                  <td width="101">
+                    <select id="opt_line_weight" class="prop_geo">
+                      <option>1</option>
+                      <option>2</option>
+                      <option>3</option>
+                      <option>4</option>
+                      <option>5</option>
+                    </select>
+                  </td>
+                  <td class="tab_col_title">类型</td>
+                  <td width="101">
+                    <select id="opt_line_dashArray" class="prop_geo">
+                      <option value="">——————</option>
+                        <!-- <option value="3,3">----------------</option> -->
+                      <option value="5,5">- - - - - - - - - -</option>
+                      <option value="10,10">— — — — —</option>
+                      <option value="20,10,5,5,5,10">— - - — - - —</option>
+                    </select>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          
+          </div>
+          <div class="bg_box_btn overflow">
+              <a id="btn_drawstyle_ok" class="btn_prop float_l" href="javascript:void(0)">确定</a>
+              <a id="btn_drawstyle_cancel" class="btn_prop float_r" href="javascript:void(0)">取消</a>
+          </div>
+          <ul class="icon_tbsnr pa " style="display: none;top:157px;" id="pointStyles">
+              <li><a class="img_marker01" href="javascript:void(0)" title=""></a></li>
+              <li><a class="img_marker02" href="javascript:void(0)" title=""></a></li>
+              <li><a class="img_marker03" href="javascript:void(0)" title=""></a></li>
+              <li><a class="img_marker04" href="javascript:void(0)" title=""></a></li>
+          </ul>
+        </div>
+        <!-- 默认样式设置弹窗 end -->
+    

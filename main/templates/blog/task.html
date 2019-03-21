@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>敦化路工程进度监察</title>
+    <link href="{{ url_for('static', filename='css/leaflet.css') }}" rel="stylesheet" />
+    <link href="{{ url_for('static', filename='css/task.css') }}" rel="stylesheet" />
+    <link rel="stylesheet" href="http://at.alicdn.com/t/font_437028_1dlarwzq84wvcxr.css"/>
+	<script src="{{url_for('static', filename='js/leaflet/jquery-2.1.4.min.js')}}"></script>
+	<script src="{{url_for('static', filename='js/leaflet/leaflet.js')}}"></script>
+    <script src="{{url_for('static', filename='js/leaflet/leaflet.ChineseTmsProviders.js')}}"></script>
+</head>
+<body>
+<div>
+<button id="closeVideo">X</button>
+<video id="videoDiv" autoplay="autoplay" src="" controls="controls">
+</video>
+</div>
+<div class="leftmenu-dunhualu">
+    <div class="head">成果展示</div>
+    <div id="resultShow" class="info" style="padding: 10px;">
+    <a id="videoBt" class="linkStyle">视频播放</a>
+    <a id="imgCompare" class="linkStyle">影像对比</a>
+    </div>
+</div>
+<div id="selectCompare" class="table-scrollable" >
+    <h3>选择对比影像</h3>          
+    <button id="closeCompareDiv">关闭</button>
+    <table id="selectTable" class="table table-striped table-bordered table-hover order-column hide" bgcolor= border=0 cellpadding=1 cellspacing=1 rules="all">  
+        <thead>  
+           <tr class="listhead">  
+               <th></th>
+               <th>批次</th>
+               <th>拍摄时间</th>                        
+           </tr>  
+        </thead>  
+        <tbody align="center" id="tbody">  
+           
+        </tbody>  
+    </table>
+    <p style="position: absolute;margin-top: 15px;margin-left: 8px;">
+    <a id="selectCommit">影像对比</a>
+    </p>
+</div>
+<!-- 影像对比 -->
+<div id="imageCompareWindow" style="display:none;z-index:10000" class="win_zs">
+        <a id="closeCompare" class="btn_close_iframe" href="javascript:void(0)">关闭</a>
+        <iframe src="" id="imageCompareFrame" width="600" height="450" scrolling="none" frameborder="2" name="main"></iframe> 
+</div>
+<div id='masking'></div>
+<!-- 地图 -->
+<div id="dhlcontainer">
+	<div class="coor">
+	  	<div style="float: left; margin-right: 6px;">
+	  		<label style="float:left">经度:</label><label style="float:left" id="currMouseLng"></label>
+	  	</div>
+	  	<div style="float: left; margin-right: 6px;">
+	  		<label style="float:left">纬度:</label><label style="float:left" id="currMouseLat"></label>
+	  	</div>
+	  	<div style="float: left;">
+	  		<label style="float:left">缩放级别:</label><label style="float:left" id="currZoom">10</label>
+	  	</div>
+	</div>
+</div>
+<style>
+#closeVideo{
+    position: absolute;
+    left: 1085px;
+    width: 20px;
+    border-radius: 5px;
+    background-color: white;
+    z-index: 1001;
+    top: 0px;
+    display:none;
+}
+#dhlcontainer{height: 100vh;width:100vw;}
+#videoDiv{
+    width: 500px;
+    position: absolute;
+    z-index: 1000;
+    top:5px;
+    left: 600px;
+    display: none;
+}
+.my-div-icon{
+    width: 500px;
+    height: 500px;
+    z-index: 1000;
+    background-color: rgb(243, 7, 7);
+}
+.leftmenu-dunhualu{
+    border-radius: 10px;
+    position: absolute;
+    float: left;
+    height: 12%;
+    width: 246px;
+    z-index: 999;
+    background: white;
+}
+#selectCompare{
+    height: 225px;
+}
+</style>
+<script>
+// var batchs=[]
+// /*获取链接后传递的工期序号(#后传递的值)*/
+// function getRequest() {  
+//     var url = window.location.href; //获取url中"?"符后的字串
+//     if (url.indexOf("#") != -1) {  
+//         var arr = url.split("#");
+//     }  
+//     return arr[1];  
+// }
+// var batch=getRequest();
+// var videoUrl="";
+// var surl="";
+// var selectImgCount=1;
+
+//  //提交影像选择结果
+// function selectCommited(){
+// var htmlIndex=[];
+// $("#selectCompare").hide();
+// $("#masking").hide();
+
+// if(selectImgCount!=2){
+//     alert("请选择两个影像进行比对");
+// }
+// else{
+    
+//     $("#tbody>tr").each(function(index){
+//         if($(this).find("td:eq(0)>input:checkbox").is(":checked") == true){
+//             htmlIndex.push(batchs[index]);
+//         }
+//     });
+
+//     var compareWindow=document.getElementById("imageCompareFrame");
+//     document.getElementById('imageCompareFrame').contentWindow.location.reload(true);
+//     compareWindow.src="../imageCompare/imageComparedh.html#"+htmlIndex[0]+";"+htmlIndex[1];
+    
+//     var imageCompareWindow=document.getElementById("imageCompareWindow");
+//     imageCompareWindow.style.display="block";
+// }
+// };
+//  //组织影像对比选择框
+// function initSelectTable(results,num){
+//     $("#tbody").empty();
+//     selectImgCount=1;
+//     var tbHtml="";
+//     for(var i=0;i<results.length;i++){
+//         if(results[i].serverUrl!=" "){
+//             tbHtml+="<tr id='tr_1'>"+
+//             "<td><input type='checkbox' name='checkImg' id='imgCheck"+i+"' value='"+i+"'/></td>"+
+//             "<td>"+results[i].batch+"</td>"+
+//             "<td>"+results[i].deadline+"</td>"+
+//             "</tr>";
+//             batchs.push(results[i].batch)
+//         }
+        
+//     }
+//     $("#tbody").append(tbHtml);
+//     var imgCheck=document.getElementById("imgCheck"+String(num*1-1));
+//     imgCheck.checked=true;
+//     //控制选择的个数最大为2
+//     $(function(){
+//         $("#tbody>tr").each(function(index){
+//         $(this).bind({ 
+//             click:function(){
+//                 if($(this).find("td:eq(0)>input:checkbox").is(":checked") == true){
+//                     if(selectImgCount<2){
+//                         selectImgCount++
+//                     }
+//                     else{
+//                         $(this).find("td:eq(0)>input:checkbox")[0].checked=false;
+//                     }
+//                 }
+//                 else{
+//                     selectImgCount--;
+//                 }
+//                 }
+//         })
+//     })
+//     })
+    
+// };
+// var num = Number(getRequest());
+// $.ajax({
+//     url: 'http://47.92.159.240:9053/queryTaskDetail',
+//     type:"GET",
+//     dataType: "json",
+//     data:{
+//         proId:'f6e2753e2efe',
+//         batch:batch
+//     },
+//     success:function(response){
+//         var data=response.data
+//         var videos=data.videos
+//         surl=data.taskDetail[0].serverurl
+//         if(videos.length>0){
+//         videoUrl=videos[0].path;
+//         var videoDiv=document.getElementById('videoDiv')
+//         videoDiv.src=videoUrl;
+//         var commitBt=document.getElementById("selectCommit");
+//         commitBt.onclick=function(){selectCommited();}
+      
+//         $("#imageCompareWindow iframe").attr("width",$(document).width()*0.99);
+//             $("#imageCompareWindow iframe").attr("height",$(document).height()-20);
+//             $("#imageCompareWindow").css({ height:$(document).height()-20, left:$(document).width()*0.003});
+//             var closeCompare=document.getElementById("closeCompare");
+//             closeCompare.onclick=function(){
+//                 var imageCompareWindow=document.getElementById("imageCompareWindow");
+//                 imageCompareWindow.style.display="none";
+//             }
+//         }
+//         if(sessionStorage.usertoken){
+    var map=L.map('dhlcontainer',{zoomControl:false}).setView([36.090699,120.386564],17);
+    map.on('mousemove', function(e){
+        $('#currMouseLng').html((e.latlng.lng).toFixed(6));
+        $('#currMouseLat').html((e.latlng.lat).toFixed(6));
+    })
+    map.on('zoomend',function(e){
+        $('#currZoom').html(map.getZoom());
+    })
+    L.control.zoom({zoomInTitle: '放大', zoomOutTitle: '缩小', position: 'bottomright'}).addTo(map);
+    L.control.scale({imperial: false}).addTo(map);
+    var satellite = L.tileLayer.chinaProvider('TianDiTu.Satellite.Map', {
+        maxZoom: 18,
+        minZoom: 4
+    });
+    var annotion = L.tileLayer.chinaProvider('TianDiTu.Satellite.Annotion', {
+        maxZoom: 18,
+        minZoom: 4
+    });
+    var staLayer = L.layerGroup([satellite, annotion]);
+    var image = L.tileLayer.chinaProvider('TianDiTu.Normal.Map', {
+        maxZoom: 18,
+        minZoom: 4
+    });
+    var img_annotion = L.tileLayer.chinaProvider('TianDiTu.Normal.Annotion', {
+        maxZoom: 18,
+        minZoom: 4
+    });
+    var imgLayer = L.layerGroup([image, img_annotion]).addTo(map);
+    var result = L.tileLayer(surl, {
+            maxZoom: 21,
+            minZoom: 10,
+            attribution: 'CloudCentury ©'
+        }).addTo(map);
+     
+//     var roadGeo={
+//     "type": "FeatureCollection",
+//     "name": "dhl",
+//     "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+//     "features": [
+//     { "type": "Feature", "properties": { "Id": 0 }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 120.38033007403132, 36.090686416182443 ], [ 120.380331850439205, 36.090911994959924 ], [ 120.380408939031412, 36.090913085119027 ], [ 120.380705767207957, 36.090910635316369 ], [ 120.381207576124922, 36.090906705834037 ], [ 120.381947296559346, 36.090904994861518 ], [ 120.382673031909164, 36.090904165988476 ], [ 120.383302483797124, 36.090900751956681 ], [ 120.384057102668692, 36.090897207259658 ], [ 120.384751146108954, 36.090895196537936 ], [ 120.384896435533648, 36.09089073841151 ], [ 120.38489625653763, 36.090967043964845 ], [ 120.384939250703709, 36.090981813925318 ], [ 120.384941243946514, 36.090939410313084 ], [ 120.385047683912717, 36.09093696524895 ], [ 120.385087776411211, 36.090968364490791 ], [ 120.385128337461339, 36.090950172797768 ], [ 120.385157296799676, 36.090927435358594 ], [ 120.385183133304864, 36.090927999499648 ], [ 120.385203874631245, 36.090922729173123 ], [ 120.385218478198979, 36.09094307927294 ], [ 120.385943056509987, 36.090941728350579 ], [ 120.385962118061883, 36.090951683120863 ], [ 120.388119255538797, 36.090952011000631 ], [ 120.388139143557737, 36.090883766193684 ], [ 120.388253674623797, 36.090867663637489 ], [ 120.388503484662664, 36.090865480590367 ], [ 120.389041256673039, 36.090862421682871 ], [ 120.38954090843886, 36.090857098593666 ], [ 120.390019961139188, 36.090852755274554 ], [ 120.390246776105442, 36.090852929022759 ], [ 120.390755094105259, 36.090852082127135 ], [ 120.39126554037037, 36.090857956519955 ], [ 120.392044016067331, 36.090861558162324 ], [ 120.392048962710746, 36.090907451645776 ], [ 120.392162244353784, 36.090911349389422 ], [ 120.392235695466042, 36.090929164669681 ], [ 120.392271503004068, 36.090948067937695 ], [ 120.392325582468644, 36.091054171242014 ], [ 120.392400010461628, 36.091042437725577 ], [ 120.392368195815621, 36.090900512590281 ], [ 120.39233457865636, 36.090728680140636 ], [ 120.39230774747432, 36.090562659050526 ], [ 120.392292032867928, 36.090549201146537 ], [ 120.392212426000398, 36.090635402542702 ], [ 120.392191141064501, 36.090679353610994 ], [ 120.392159525612669, 36.090702511890434 ], [ 120.392133671110571, 36.0907180454223 ], [ 120.392098959437675, 36.090734876487431 ], [ 120.392059237803238, 36.090747723341636 ], [ 120.392028154031053, 36.090754796607762 ], [ 120.392004190905823, 36.090757553672823 ], [ 120.391567883380034, 36.09075758973632 ], [ 120.391552191153906, 36.090754565176127 ], [ 120.391517779507396, 36.090740103750385 ], [ 120.39151101339867, 36.090733696600537 ], [ 120.391496537780228, 36.090716092401252 ], [ 120.391486177923937, 36.090696193175987 ], [ 120.391479953525604, 36.090673403186074 ], [ 120.391478290673518, 36.090645943207278 ], [ 120.391388252382669, 36.090647370164639 ], [ 120.388577331045624, 36.090649062290758 ], [ 120.388431906170297, 36.090648752605304 ], [ 120.388158572491207, 36.090624906470424 ], [ 120.38812857327828, 36.090599213121422 ], [ 120.387197012199493, 36.090596061583248 ], [ 120.385683828685373, 36.090615977066918 ], [ 120.384942234156313, 36.090625539710722 ], [ 120.384898829422454, 36.090623161076842 ], [ 120.384748977258596, 36.090623465632468 ], [ 120.384741093655663, 36.090595392819033 ], [ 120.384696149874458, 36.090595126705018 ], [ 120.384640522055605, 36.090624674091828 ], [ 120.384624268888118, 36.090662950795512 ], [ 120.38403397610773, 36.09065506542531 ], [ 120.383313422214911, 36.090641469338991 ], [ 120.383233982121368, 36.090618271478959 ], [ 120.382627761750683, 36.090585707506378 ], [ 120.382628577811118, 36.090640811206974 ], [ 120.382597750338064, 36.090640137430931 ], [ 120.382604643410573, 36.090751175217214 ], [ 120.38247747813611, 36.090758411379603 ], [ 120.381571389750434, 36.090757918927387 ], [ 120.381570355166673, 36.090656309414626 ], [ 120.381504296340069, 36.090654865015253 ], [ 120.381502763542812, 36.090568268022096 ], [ 120.381246932985135, 36.090574835665613 ], [ 120.380430710868339, 36.090575584345309 ], [ 120.380426385596252, 36.090652752980439 ], [ 120.38033007403132, 36.090686416182443 ] ] ] ] } }
+//     ]
+//     }
+//     var roadLayer=L.geoJson(roadGeo,{color:'red',fillOpacity:0}).addTo(map);
+    var baseMaps = {
+        '街道图': imgLayer,
+        '卫星图': staLayer
+    };
+//         var overlayMaps = {
+//             '正射影像': result,
+//             '道路':roadLayer
+//         };
+    L.control.layers(baseMaps, null).addTo(map);
+//     var shipinIcon=L.icon({
+//         iconUrl: 'img/shipin.png',
+//         iconSize: [38, 38],
+//         iconAnchor: [22, 22],
+//         popupAnchor: [-3, -76]
+//     });  
+//      $("#closeVideo").click(function(){
+//           $("#videoDiv").toggle()
+//           $("#closeVideo").toggle()
+//        });
+//     $(function(){
+//         $(".leaflet-marker-icon").mouseover(function(){
+//             if(!($(this).is(":animated"))){
+//                 $(this).animate({"top":"-10px",},200).animate({"top":"-0px",},200)
+//                 .animate({"top":"-6px",},200).animate({"top":"-1px",},200)
+//                 .animate({"top":"-1px",},200).animate({"top":"-0px",},200);
+//             }
+//         });
+//     });
+//     $("#videoBt").click(function(){
+//           $("#videoDiv").toggle()
+//           $("#closeVideo").toggle()
+//     })
+//     $('#imgCompare').click(function(){
+//         selectImgCount=1;
+//         $("#selectCompare").toggle();
+//         $.ajax({
+//         url: 'http://47.92.159.240:9053/queryTask',
+//         type:"GET",
+//         dataType: "json",
+//         data:{
+//             proId:'f6e2753e2efe'
+//         },
+//         success:function(response){
+//             data=response.data;
+//             initSelectTable(data,num)
+//         }})
+//             $("#masking").toggle();
+//     });
+//     $('#closeCompareDiv').click(function(){
+//          $("#selectCompare").toggle();
+//     }
+
+//     )
+//      }
+//     else{
+//         var loginUrl=window.location.href.split("static")[0];
+//         window.location.href=loginUrl;
+//     }
+//     }
+// })
+
+
+</script>
+</body>
+</html>

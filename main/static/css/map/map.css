@@ -1,0 +1,56 @@
+#mapcontainer{
+       /* float: right; */
+    /* z-index: 1; */
+    /* background: #b0e0c1; */
+    position: fixed;
+    height: 100vh;
+    width: 100vw;
+    /* margin-left: 240px; */
+    margin-top: 60px;
+}
+/* 工具栏 */
+.box_tool{position:absolute;height:54px;}
+.box_tool_inner{position:relative;height:41px;padding:6.5px;}
+.box_tool_container{height:37px;border:2px solid #47caff;background-color: rgba(23, 102, 144, 0.7);border-radius:6px;}
+.box_tool_container .btn_tool{line-height:37px;padding: 0 6px;height: 37px;display: block;float: left;}
+.box_tool_container .btn_tool .icon{color:#fff;font-size:20px;}
+.box_tool_container .btn_tool:hover .icon,.box_tool_container .active .icon,.box_search .btn:hover .icon{color:#47caff;}
+.box_tool_container .btn_close{border-left:1px dashed #47caff;}
+.box_tool_list{position:absolute;top:46px;right:100px;padding-bottom:10px;background-color:rgba(23, 102, 144, 0.7);border-radius: 0 0 12px 12px;border:2px solid #47caff;}
+.box_tool_list ul{}
+.box_tool_list ul li{line-height:24px;color:#eee;cursor:pointer;padding:0 8px;border-bottom: 1px solid rgba(23, 102, 144, 0.7);}
+.box_tool_list ul li:hover{color:#47caff;background-color:rgba(23, 102, 144, 0.9);}
+.box_tool_list a{cursor:pointer;}
+
+.coor{
+    z-index: 1000;
+    position: absolute;
+    left:300px;
+}
+#attriFormContainer{
+    height: 100vh;
+    width: 300px;
+    position: absolute;
+    right: 0px;
+    z-index: 1000;
+    background: #0c658ac7;
+    margin-top: 60px;
+    display: none;
+}
+#attriForm{
+    margin-top: 30px;
+    margin-left: 10px;
+}
+.formApply{
+    display: block;
+    margin: 0 auto;
+}
+.evo-colorind{
+    display: none!important;
+}
+#selectCompare{
+    z-index: 1000;
+    position: absolute;
+    left: 600px;
+    top: 100px;
+}

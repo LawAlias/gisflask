@@ -1,0 +1,7 @@
+{% extends 'admin/model/create.html' %}
+{% block body %}
+  <span><b>{{ admin_view.name }}</b> <i>({{ admin_view.doc()}})</i><input type="button" class="pull-right" value="Back" onclick="window.history.back()" /></span>
+
+    {{super() }}
+{% endblock %}
+

@@ -1,0 +1,34 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[dev-packages]
+watchdog = "*"
+faker = "*"
+
+[packages]
+bootstrap-flask = "*"
+flask-moment = "*"
+flask-sqlalchemy = "*"
+python-dotenv = "*"
+flask-wtf = "*"
+flask = "*"
+flask-login = "*"
+flask-debugtoolbar = "*"
+"psycopg2" = "*"
+flask-ckeditor = "*"
+flask-dropzone = "*"
+exifread = "*"
+flask-whooshee = "*"
+"geoalchemy2" = "*"
+flask-xadmin = "*"
+enum = "*"
+"httplib2" = "*"
+pyshp = "*"
+flask-cors = "*"
+flask-bootstrap = "*"
+fastkml = "*"
+gdal = "==2.4.0"
+flask-table = "*"
+shapely = "*"

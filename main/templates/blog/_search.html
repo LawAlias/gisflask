@@ -1,0 +1,44 @@
+<div id="searchContainer" class="col-sm-4">
+    <div class="input-group">
+        <input type="text" id="searchKey" class="form-control" onkeydown="onKeyDown(event)"/>
+        <span class="input-group-btn">
+            <button class="btn btn-default iconele icon-chaxun" type="button" style="background: #3d84b3;border-radius: 2px;">
+                
+            </button>
+        </span>
+        
+    </div>
+</div>
+    
+    
+<script type="text/javascript">
+    function onKeyDown(event){
+        var searchKey=$("#searchKey").val();
+        var e = event || window.event || arguments.callee.caller.arguments[0];
+        if(e && e.keyCode==27){ // 按 Esc 
+            //要做的事情
+        }
+        if(e && e.keyCode==113){ // 按 F2 
+                //要做的事情
+        }            
+        if(e && e.keyCode==13){ // enter 键
+                $.ajax({
+                    url:searchFeature,
+                    data:{
+                        "key":searchKey
+                    },
+                    type:"POST",
+                    success:function(response){
+                        response=JSON.parse(response);
+                        var geo=response.data;
+                        var geoLayer=L.geoJSON(geo,{style:{"color":"red"}}).bindPopup('名称:'+searchKey).addTo(map);
+                        geoLayer.openPopup();
+                        map.fitBounds(geoLayer.getBounds());
+                       
+                    }
+                })
+        }
+        
+    }
+
+</script>

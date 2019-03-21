@@ -1,0 +1,23 @@
+
+{% extends 'admin/master.html' %}
+{% include "security/_messages.html" %}
+
+{% block body %}
+    <form action="" method="POST" name="edit_mode_form">
+        {{ edit_mode_form.hidden_tag() }}
+        <div style="font-size: 16px">
+            {{ edit_mode_form.password(class="form-control", placeholder="password?") }}
+            <div style="color: red; font-size: 16px">
+                {% if edit_mode_form.password.errors %}
+                    {% for error in edit_mode_form.password.errors %}
+                        {{ error }}
+                    {% endfor %}
+                {% endif %}
+            </div>
+            {{ edit_mode_form.submit(class='btn btn-success') }}
+        </div>
+        </div>
+    </form>
+
+{% endblock %}
+

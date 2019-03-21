@@ -1,0 +1,82 @@
+<!-- 上传文件 -->
+{% extends 'indexbase.html' %}
+{% from 'bootstrap/form.html' import render_form %}
+{% block otherscripts %}
+{{ dropzone.load_css() }}
+{{ dropzone.style('border: 2px dashed #0087F7; margin: 10%; min-height: 400px;left: 300px;position: absolute;width: 500px;') }}
+<style>
+#layerSelectForm{
+    position: absolute;
+    left: 520px;
+    top: 0px;
+}
+#upload{
+    position: absolute;
+    right: 250px;
+    top: 220px;
+    background-color: #9DC45F;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-border-radius: 5px;
+    border: none;
+    color: #FFF;
+    text-shadow: 1px 1px 1px #949494;
+}
+#layerSelect{
+    width: 100px;
+}
+
+</style>
+<script type="text/javascript">
+
+var selectDom="<div id='layerSelectForm' class='form-group required'><label class='form-control-label' for='layerSelect'>选择导入图层</label>"+  
+        "<select class='form-control' id='layerSelect' name='layerSelect' required></select>"+  
+    "</div>";
+$(function(){
+    $("#myDropzone").append(selectDom);
+});
+ var nameDic={};
+    $.ajax({
+        url:getLayerNames,
+        data:{},
+        type:"POST",
+        success:function(response){
+            response=JSON.parse(response);
+            debugger;
+            if(response.code==200){
+                var data=response.data;
+                for(var i=0;i<data.length;i++){
+                    var layersMenu=data[i];
+                    if(layersMenu.name){
+                        nameDic[layersMenu.name]=layersMenu.uid;
+                        var dom="<option value="+layersMenu.name+">"+layersMenu.name+"</option>";
+                        $("#layerSelect").append(dom)
+                    }
+                }
+            }
+        }
+    })
+</script>
+{% endblock %}
+{% block title %}导入矢量数据{% endblock %}
+{% block content %}
+
+<div id="selectContainer" style="margin: 1% 1%;right: 150px;">
+    {{ dropzone.create('vectorImport') }}
+    {{ dropzone.load_js() }}
+    {{ dropzone.config() }}
+    <button id="upload">导入</button>
+</div>
+
+
+<!-- <div class="form-group" style="position: absolute;right: 100px;top: 100px;">
+    <label for="email" id="importTip">选择导入图层</label>	
+    <div class="col-sm-6" style="padding-left: 0;padding-right: 0;">	
+        <select id="layerSelect" class="form-control" style="width:150px;">
+            
+        </select>   
+    </div>
+</div> -->
+{% endblock %}
+
+

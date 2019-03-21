@@ -1,0 +1,17 @@
+{% extends 'indexbase.html' %}
+{% from 'bootstrap/form.html' import render_form %}
+
+{% block title %}影像上传{% endblock %}
+{% block content %}
+
+<h1 align="center">地图服务数据发布</h1>
+    <div class="publishDiv">
+     <!-- 根据传入的表单类进行表单渲染 -->
+     {{ render_form(form) }}
+    </div>
+{% endblock %}
+
+{% block otherscripts %}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/map/upload.css') }}" type="text/css">
+{% endblock %}
