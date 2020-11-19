@@ -23,25 +23,7 @@ flask run
 
 即可启动
 
-三、部分功能截图
-
-待有时间慢慢完善该文档，在这就先贴上截图：
-
-https://upload-images.jianshu.io/upload_images/13212811-0c4a0f18f8f17acb.jpg?imageMogr2/auto-orient/strip|imageView2/2/w/1200
-https://upload-images.jianshu.io/upload_images/13212811-264c79c2d61cf84a.jpg?imageMogr2/auto-orient/strip|imageView2/2/w/1200
-
-目前上传支持shp和kml
-https://upload-images.jianshu.io/upload_images/13212811-f05b559bf3b6cd63.jpg?imageMogr2/auto-orient/strip|imageView2/2/w/1200
-
-https://upload-images.jianshu.io/upload_images/13212811-ecdebc3584be3c9d.jpg?imageMogr2/auto-orient/strip|imageView2/2/w/1200
-权限管理：
-
-https://upload-images.jianshu.io/upload_images/13212811-03e03fdcc99e8f23.jpg?imageMogr2/auto-orient/strip|imageView2/2/w/1200
-
-https://upload-images.jianshu.io/upload_images/13212811-0ab9a03d47f1a675.jpg?imageMogr2/auto-orient/strip|imageView2/2/w/1200
-
-
-
-
+详情：
+https://www.jianshu.com/p/935c91e7686b
 
 
